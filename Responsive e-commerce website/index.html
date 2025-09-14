@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpikeHub - Premium Electronics</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .page { display: none; }
+        .page.active { display: block; }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        
+        .dark-mode .bg-white {
+            background-color: #2d3748 !important;
+            color: #e2e8f0 !important;
+        }
+        
+        .dark-mode .text-gray-900 {
+            color: #e2e8f0 !important;
+        }
+        
+        .dark-mode .text-gray-600 {
+            color: #a0aec0 !important;
+        }
+        
+        .dark-mode .border-gray-200 {
+            border-color: #4a5568 !important;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu { display: none; }
+            .mobile-menu.active { display: block; }
+        }
+        
+        .animate-bounce-slow {
+            animation: bounce 2s infinite;
+        }
+        
+        .cart-badge {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-bolt text-2xl text-purple-600"></i>
+                    <h1 class="text-2xl font-bold text-gray-900">SpikeHub</h1>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <button onclick="showPage('home')" class="nav-link text-gray-600 hover:text-purple-600 transition-colors">Home</button>
+                    <button onclick="showPage('products')" class="nav-link text-gray-600 hover:text-purple-600 transition-colors">Products</button>
+                    <button onclick="showPage('contact')" class="nav-link text-gray-600 hover:text-purple-600 transition-colors">Contact</button>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                        <i id="theme-icon" class="fas fa-moon text-gray-600"></i>
+                    </button>
+                    <button onclick="showPage('cart')" class="relative p-2 text-gray-600 hover:text-purple-600 transition-colors">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-badge" class="absolute -top-2 -right-2 cart-badge text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-xl text-gray-600"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu md:hidden pb-4 border-t border-gray-200">
+                <button onclick="showPage('home')" class="block w-full text-left py-2 px-4 text-gray-600 hover:bg-gray-50">Home</button>
+                <button onclick="showPage('products')" class="block w-full text-left py-2 px-4 text-gray-600 hover:bg-gray-50">Products</button>
+                <button onclick="showPage('contact')" class="block w-full text-left py-2 px-4 text-gray-600 hover:bg-gray-50">Contact</button>
+                <button onclick="showPage('cart')" class="block w-full text-left py-2 px-4 text-gray-600 hover:bg-gray-50">
+                    Cart (<span id="mobile-cart-count">0</span>)
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero-gradient text-white py-20">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-bounce-slow">
+                    Premium Electronics Store
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 opacity-90">
+                    Discover cutting-edge technology at unbeatable prices
+                </p>
+                <button onclick="showPage('products')" class="bg-white text-purple-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors transform hover:scale-105">
+                    Shop Now <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </section>
+        
+        <!-- Search Bar -->
+        <section class="py-8 bg-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="max-w-md mx-auto relative">
+                    <input type="text" id="search-input" placeholder="Search products..." 
+                           class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-full focus:outline-none focus:border-purple-500 transition-colors">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+                <div class="flex justify-center mt-4 space-x-4">
+                    <button onclick="sortProducts('name')" class="px-4 py-2 bg-gray-100 rounded-full hover:bg-purple-100 transition-colors">
+                        Sort by Name
+                    </button>
+                    <button onclick="sortProducts('price-low')" class="px-4 py-2 bg-gray-100 rounded-full hover:bg-purple-100 transition-colors">
+                        Price: Low to High
+                    </button>
+                    <button onclick="sortProducts('price-high')" class="px-4 py-2 bg-gray-100 rounded-full hover:bg-purple-100 transition-colors">
+                        Price: High to Low
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Products -->
+        <section class="py-16">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Featured Products</h2>
+                <div id="featured-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Products will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Products Page -->
+    <div id="products" class="page">
+        <section class="py-16">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">All Products</h2>
+                <div id="all-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <!-- Products will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Product Details Page -->
+    <div id="product-details" class="page">
+        <section class="py-16">
+            <div class="max-w-7xl mx-auto px-4">
+                <div id="product-detail-content">
+                    <!-- Product details will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Cart Page -->
+    <div id="cart" class="page">
+        <section class="py-16">
+            <div class="max-w-4xl mx-auto px-4">
+                <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Shopping Cart</h2>
+                <div id="cart-content">
+                    <!-- Cart content will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+        <section class="py-16">
+            <div class="max-w-2xl mx-auto px-4">
+                <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Contact Us</h2>
+                <form id="contact-form" class="bg-white p-8 rounded-lg shadow-lg">
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Name</label>
+                        <input type="text" id="contact-name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500" required>
+                        <div id="name-error" class="text-red-500 text-sm mt-1 hidden">Please enter your name</div>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input type="email" id="contact-email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500" required>
+                        <div id="email-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid email</div>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Subject</label>
+                        <input type="text" id="contact-subject" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500" required>
+                        <div id="subject-error" class="text-red-500 text-sm mt-1 hidden">Please enter a subject</div>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Message</label>
+                        <textarea id="contact-message" rows="6" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500" required></textarea>
+                        <div id="message-error" class="text-red-500 text-sm mt-1 hidden">Please enter your message</div>
+                    </div>
+                    <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Sample product data
+        const products = [
+            {
+                id: 1,
+                name: "Apple iphone 16 Pro",
+                price: 750,
+                image: "https://th.bing.com/th?id=OIF.An1yugl%2bhK3kYB1bKYyGjQ&rs=1&pid=ImgDetMain&o=7&rm=3",
+                description: "The iPhone 16 Pro is Apple’s high-end 2024 flagship, built with a Grade-5 titanium frame for strength and lighter weight, featuring very thin borders and large Super Retina XDR OLED displays — 6.3-inch on the Pro and 6.9-inch on the Pro Max.."
+            },
+            {
+                id: 2,
+                name: "MacBook Air M2",
+                price: 900,
+                image: "https://www.picclickimg.com/j-IAAOSwIdNlgcY-/2022-Apple-MacBook-Air-13-M2-39-GHz.webp",
+                description: "The MacBook Air M2 is Apple’s sleek, lightweight laptop powered by the M2 chip, offering faster performance with an 8-core CPU, up to a 10-core GPU, and a 16-core Neural Engine. It features a 13.6-inch Liquid Retina display with 500 nits brightness, a fanless thin design weighing just 1.24 kg, and long battery life of up to 18 hours. With MagSafe charging, dual Thunderbolt/USB-4 ports, and support for up to 24 GB unified memory and 2 TB storage, it delivers strong performance and portability for everyday and professional use."
+            },
+            {
+                id: 3,
+                name: "AirPods Pro",
+                price: 200,
+                image: "https://betanews.com/wp-content/uploads/2025/09/Apple-AirPods-Pro-3.jpeg",
+                description: "The Apple AirPods Pro 3 bring a refined design with more secure fit options, upgraded active noise cancellation claimed to be twice as effective as the previous model, and new health features like built-in heart rate sensing for workouts. They also gain an IP57 rating for improved dust and water resistance, support for live translation in face-to-face conversations, and maintain Apple’s seamless ecosystem integration, making them a premium choice for immersive audio and smart functionality.."
+            },
+            {
+                id: 4,
+                name: "iPad Pro 12.9",
+                price: 350,
+                image: "https://m.media-amazon.com/images/I/51em9QLiToL._SY879_.jpg",
+description: "The iPad Pro 12.9 is Apple’s most powerful tablet, featuring a stunning Liquid Retina XDR (mini-LED) or Ultra Retina XDR (OLED, 2024) display with ProMotion 120Hz for smooth visuals. Powered by Apple’s M2 or M4 chip, it delivers desktop-class performance for multitasking, creative work, and professional apps. It supports Apple Pencil and Magic Keyboard, offers Thunderbolt/USB-C connectivity, Face ID, and up to 2TB storage, making it ideal for creators and power users, though its large size and premium price limit portability and accessibility. Professional tablet with M2 chip and stunning Liquid Retina display."
+            },
+            {
+                id: 5,
+                name: "Apple Watch Series 9",
+                price: 700,
+                image: "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6340/6340273_sd.jpg",
+                description: "The Apple Watch Series 9 is a premium smartwatch powered by the new S9 chip, offering faster performance, improved efficiency, and a brighter 2,000-nit display for better outdoor visibility. It introduces the double-tap gesture for hands-free control, while continuing to provide advanced health features like ECG, heart rate and temperature sensing, fitness tracking, and water resistance. With sleek design, watchOS 10, and enhanced Siri processing, it delivers both style and smart functionality for everyday use.."
+            },
+            {
+                id: 6,
+                name: "Samsung Galaxy S24 ultra",
+                price: 320,
+                image: "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6570/6570396_sd.jpg",
+                description: "The Galaxy S24 Ultra is Samsung’s flagship Android phone (launched in early 2024), built with premium materials (a titanium frame and Gorilla Glass Armor) and a 6.8-inch QHD+ Dynamic AMOLED 2X display with a 1-120Hz adaptive refresh rate and very high peak brightness (~2600 nits).."
+            },
+            {
+                id: 7,
+                name: "Sony WH-1000XM5",
+                price: 70,
+                image: "https://tse2.mm.bing.net/th/id/OIP.ZizkAON6uFQeQYa3wXEjOwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
+                description: "Sony’s WH-1000XM5 are premium over-ear wireless headphones known for class-leading active noise cancellation (ANC), high sound fidelity, and long battery life. They use dual processors (Integrated V1 + HD NC QN1) and eight microphones to deliver superior noise suppression and improved call clarity. The headphones feature a comfortable design with plush ear cups and a lightweight build, making them suitable for extended wear. With support for LDAC codec, they provide high-resolution audio streaming over Bluetooth. Additional features include touch controls, voice assistant integration, and adaptive sound control that adjusts to your environment."
+            },
+            {
+                id: 8,
+                name: "Dell XPS 13",
+                price: 545,
+                image: "https://cdn.mos.cms.futurecdn.net/qSixb4PUnjszJKjh6zV9Nk.jpg",
+                description: "The Dell XPS 13 is a premium ultrabook known for its sleek aluminum design, lightweight build, and edge-to-edge “InfinityEdge” display.It offers powerful Intel processors, fast SSD storage, and sharp FHD+ or OLED screens, making it ideal for productivity and everyday use. While it delivers excellent portability and performance, it comes at a higher price and has limited ports, often requiring adapters."
+            }
+        ];
+
+        let cart = [];
+        let currentProducts = [...products];
+        let isDarkMode = false;
+
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            if (pageId === 'products') {
+                renderProducts('all-products', currentProducts);
+            } else if (pageId === 'home') {
+                renderProducts('featured-products', currentProducts.slice(0, 6));
+            } else if (pageId === 'cart') {
+                renderCart();
+            }
+            
+            // Close mobile menu
+            document.getElementById('mobile-menu').classList.remove('active');
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('active');
+        }
+
+        // Dark mode toggle
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('theme-icon');
+            icon.className = isDarkMode ? 'fas fa-sun text-yellow-400' : 'fas fa-moon text-gray-600';
+        }
+
+        // Render products
+        function renderProducts(containerId, productsToRender) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = productsToRender.map(product => `
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover">
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">${product.name}</h3>
+                        <p class="text-gray-600 mb-4">${product.description.substring(0, 80)}...</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-purple-600">$${product.price}</span>
+                            <div class="space-x-2">
+                                <button onclick="showProductDetails(${product.id})" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                                    View Details
+                                </button>
+                                <button onclick="addToCart(${product.id})" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show product details
+        function showProductDetails(productId) {
+            const product = products.find(p => p.id === productId);
+            const recommendations = products.filter(p => p.id !== productId).slice(0, 3);
+            
+            document.getElementById('product-detail-content').innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+                    <div>
+                        <img src="${product.image}" alt="${product.name}" class="w-full rounded-lg shadow-lg">
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-bold text-gray-900 mb-4">${product.name}</h1>
+                        <p class="text-3xl font-bold text-purple-600 mb-6">$${product.price}</p>
+                        <p class="text-gray-600 mb-8 text-lg leading-relaxed">${product.description}</p>
+                        <div class="space-y-4">
+                            <button onclick="addToCart(${product.id})" class="w-full bg-purple-600 text-white py-4 rounded-lg text-lg font-semibold hover:bg-purple-700 transition-colors">
+                                Add to Cart
+                            </button>
+                            <button onclick="showPage('products')" class="w-full bg-gray-100 text-gray-700 py-4 rounded-lg text-lg font-semibold hover:bg-gray-200 transition-colors">
+                                Back to Products
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-8">You might also like</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        ${recommendations.map(rec => `
+                            <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover">
+                                <img src="${rec.image}" alt="${rec.name}" class="w-full h-48 object-cover">
+                                <div class="p-4">
+                                    <h4 class="text-lg font-semibold text-gray-900 mb-2">${rec.name}</h4>
+                                    <p class="text-purple-600 font-bold mb-4">$${rec.price}</p>
+                                    <button onclick="showProductDetails(${rec.id})" class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                                        View Details
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            showPage('product-details');
+        }
+
+        // Add to cart
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            
+            updateCartBadge();
+            showCartNotification();
+        }
+
+        // Remove from cart
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartBadge();
+            renderCart();
+        }
+
+        // Update cart quantity
+        function updateQuantity(productId, quantity) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity = Math.max(1, quantity);
+                updateCartBadge();
+                renderCart();
+            }
+        }
+
+        // Update cart badge
+        function updateCartBadge() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-badge').textContent = totalItems;
+            document.getElementById('mobile-cart-count').textContent = totalItems;
+        }
+
+        // Show cart notification
+        function showCartNotification() {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform';
+            notification.innerHTML = '<i class="fas fa-check mr-2"></i>Added to cart!';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.remove('translate-x-full'), 100);
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+        }
+
+        // Render cart
+        function renderCart() {
+            const container = document.getElementById('cart-content');
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16">
+                        <i class="fas fa-shopping-cart text-6xl text-gray-300 mb-4"></i>
+                        <h3 class="text-2xl font-semibold text-gray-600 mb-4">Your cart is empty</h3>
+                        <button onclick="showPage('products')" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                            Start Shopping
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            container.innerHTML = `
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    ${cart.map(item => `
+                        <div class="flex items-center p-6 border-b border-gray-200">
+                            <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded-lg mr-4">
+                            <div class="flex-1">
+                                <h3 class="text-lg font-semibold text-gray-900">${item.name}</h3>
+                                <p class="text-purple-600 font-bold">$${item.price}</p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center border border-gray-300 rounded-lg">
+                                    <button onclick="updateQuantity(${item.id}, ${item.quantity - 1})" class="px-3 py-1 hover:bg-gray-100">-</button>
+                                    <span class="px-4 py-1 border-l border-r border-gray-300">${item.quantity}</span>
+                                    <button onclick="updateQuantity(${item.id}, ${item.quantity + 1})" class="px-3 py-1 hover:bg-gray-100">+</button>
+                                </div>
+                                <span class="font-bold text-lg">$${item.price * item.quantity}</span>
+                                <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700 ml-4">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                    
+                    <div class="p-6 bg-gray-50">
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="text-2xl font-bold">Total: $${total}</span>
+                        </div>
+                        <button onclick="checkout()" class="w-full bg-purple-600 text-white py-4 rounded-lg text-lg font-semibold hover:bg-purple-700 transition-colors">
+                            Proceed to Checkout
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Checkout function
+        function checkout() {
+            alert('Thank you for your purchase! This is a demo checkout.');
+            cart = [];
+            updateCartBadge();
+            renderCart();
+        }
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            currentProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm) ||
+                product.description.toLowerCase().includes(searchTerm)
+            );
+            
+            if (document.getElementById('home').classList.contains('active')) {
+                renderProducts('featured-products', currentProducts.slice(0, 6));
+            } else if (document.getElementById('products').classList.contains('active')) {
+                renderProducts('all-products', currentProducts);
+            }
+        });
+
+        // Sort functionality
+        function sortProducts(sortBy) {
+            if (sortBy === 'name') {
+                currentProducts.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (sortBy === 'price-low') {
+                currentProducts.sort((a, b) => a.price - b.price);
+            } else if (sortBy === 'price-high') {
+                currentProducts.sort((a, b) => b.price - a.price);
+            }
+            
+            if (document.getElementById('home').classList.contains('active')) {
+                renderProducts('featured-products', currentProducts.slice(0, 6));
+            } else if (document.getElementById('products').classList.contains('active')) {
+                renderProducts('all-products', currentProducts);
+            }
+        }
+
+        // Contact form validation
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const subject = document.getElementById('contact-subject').value.trim();
+            const message = document.getElementById('contact-message').value.trim();
+            
+            let isValid = true;
+            
+            // Hide all error messages
+            document.querySelectorAll('[id$="-error"]').forEach(error => error.classList.add('hidden'));
+            
+            // Validate name
+            if (!name) {
+                document.getElementById('name-error').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                document.getElementById('email-error').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Validate subject
+            if (!subject) {
+                document.getElementById('subject-error').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Validate message
+            if (!message) {
+                document.getElementById('message-error').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                alert('Thank you for your message! We will get back to you soon.');
+                document.getElementById('contact-form').reset();
+            }
+        });
+
+        // Initialize the page
+        renderProducts('featured-products', products.slice(0, 6));
+    </script>
+</body>
+</html>
