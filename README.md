@@ -74,13 +74,3 @@ Responsive-e-commerce-website/
 ```
 
 ---
-
-## 🙌 Credits
-
-Developed by [v3nom777](https://github.com/v3nom777).
-
----
-
-## 📧 Contact
-
-For any queries or feedback, feel free to use the contact form on the website or open an issue in this repository.
